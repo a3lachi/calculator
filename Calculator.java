@@ -65,28 +65,57 @@ public class Calculator extends Application {
 
         
         Label l = new Label("0");
-        l.setPrefHeight(30);
+        l.setPrefHeight(50);
         l.setPrefWidth(240);
-        l.setStyle(" -fx-background-color: #475569; -fx-font-size: 30 ; -fx-text-fill: #f8fafc;");
+        l.setStyle(" -fx-background-color: #475569; -fx-font-size: 30 ; -fx-text-fill: #f8fafc; -fx-alignment: center-right; -fx-padding: 0 10 0 0;");
         StackPane headLabel = new StackPane();
         headLabel.getChildren().add(l);
 
+        Button[] buttons = {button0,button1,button2,button3,button4,button5,button6,button7,button8,button9} ;
+
+        for (int i=0; i<10;i++) {
+            int btnNum = i ;
+            buttons[i].setOnAction(e -> {
+                System.out.println(btnNum+" clicked!");
+                
+                Label insideCalc = (Label) headLabel.getChildren().get(0);
+                String textCalc = insideCalc.getText() ;
+                if (textCalc.equals("0")) {
+                    textCalc = String.valueOf(btnNum);
+                } else {
+                    textCalc += String.valueOf(btnNum);
+                }
+                Label labelToAdd = new Label(textCalc);
+                labelToAdd.setPrefHeight(50);
+                labelToAdd.setPrefWidth(240);
+                labelToAdd.setStyle(" -fx-background-color: #475569; -fx-font-size: 30 ; -fx-text-fill: #f8fafc; -fx-alignment: center-right; -fx-padding: 0 10 0 0;");
+                headLabel.getChildren().remove(0);headLabel.getChildren().add(labelToAdd);
+            });
+        }
 
 
-        button9.setOnAction(e -> {
-            System.out.println("9 clicked!");
-            
+        buttonVirgule.setOnAction(e -> {
+            System.out.println(", clicked!");
             Label insideCalc = (Label) headLabel.getChildren().get(0);
             String textCalc = insideCalc.getText() ;
-            if (textCalc.equals("0")) {
-                textCalc = "9";
-            } else {
-                textCalc += "9";
+            if (textCalc.indexOf(",")==-1) {
+                textCalc += ",";
             }
-            System.out.println(textCalc);
-            headLabel.getChildren().remove(0);
-            Label l9 = new Label(textCalc);
-            headLabel.getChildren().add(l9);
+            Label labelToAdd = new Label(textCalc);
+            labelToAdd.setPrefHeight(50);
+            labelToAdd.setPrefWidth(240);
+            labelToAdd.setStyle(" -fx-background-color: #475569; -fx-font-size: 30 ; -fx-text-fill: #f8fafc; -fx-alignment: center-right; -fx-padding: 0 10 0 0;");
+            headLabel.getChildren().remove(0);headLabel.getChildren().add(labelToAdd);
+        });
+
+        buttonC.setOnAction(e -> {
+            System.out.println("C clicked!");
+            String textCalc = "0";
+            Label labelToAdd = new Label(textCalc);
+            labelToAdd.setPrefHeight(50);
+            labelToAdd.setPrefWidth(240);
+            labelToAdd.setStyle(" -fx-background-color: #475569; -fx-font-size: 30 ; -fx-text-fill: #f8fafc; -fx-alignment: center-right; -fx-padding: 0 10 0 0;");
+            headLabel.getChildren().remove(0);headLabel.getChildren().add(labelToAdd);
         });
 
 
@@ -94,7 +123,7 @@ public class Calculator extends Application {
         VBox root = new VBox();
         root.getChildren().addAll(headLabel,hbx5,hbx4,hbx3,hbx2, hbx1);
 
-        Scene scene = new Scene(root, 240, 330);
+        Scene scene = new Scene(root, 240, 350);
         stage.setScene(scene);
         stage.show();
     }
