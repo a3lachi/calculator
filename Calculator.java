@@ -67,9 +67,29 @@ public class Calculator extends Application {
         Label l = new Label("0");
         l.setPrefHeight(30);
         l.setPrefWidth(240);
+        l.setStyle(" -fx-background-color: #475569; -fx-font-size: 30 ; -fx-text-fill: #f8fafc;");
         StackPane headLabel = new StackPane();
-        headLabel.setStyle("-fx-padding: 20px; -fx-background-color: #475569; -fx-font-size: 30 ; -fx-text-fill: #f8fafc;");
         headLabel.getChildren().add(l);
+
+
+
+        button9.setOnAction(e -> {
+            System.out.println("9 clicked!");
+            
+            Label insideCalc = (Label) headLabel.getChildren().get(0);
+            String textCalc = insideCalc.getText() ;
+            if (textCalc.equals("0")) {
+                textCalc = "9";
+            } else {
+                textCalc += "9";
+            }
+            System.out.println(textCalc);
+            headLabel.getChildren().remove(0);
+            Label l9 = new Label(textCalc);
+            headLabel.getChildren().add(l9);
+        });
+
+
 
         VBox root = new VBox();
         root.getChildren().addAll(headLabel,hbx5,hbx4,hbx3,hbx2, hbx1);
