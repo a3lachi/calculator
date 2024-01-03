@@ -20,7 +20,7 @@ class Btn extends Button {
         super(label);
         this.setPrefWidth(width);
         this.setPrefHeight(height);
-        this.setStyle("-fx-background-color: "+color+"; -fx-text-fill: white; -fx-font-size: "+fontSize+";");
+        this.setStyle("-fx-background-color: "+color+"; -fx-text-fill: white; -fx-font-size: "+fontSize+";-fx-font-weight: bold;  -fx-border-color: #94a3b8; -fx-focus-color: transparent; -fx-inner-border: transparent;");
     }
 }
 
@@ -28,8 +28,6 @@ public class Calculator extends Application {
 
     @Override
     public void start(Stage stage) {
-        
-
         
         // Button button0 = new Button("0");button0.setStyle("-fx-font-size: 20;");
         Btn button0 = new Btn("0",120,60,20);
@@ -47,9 +45,9 @@ public class Calculator extends Application {
         Button button8 = new Btn("8",60,60,20);
         Button button9 = new Btn("9",60,60,20);
         Button buttonMultiply = new Btn("x",60,60,20,"#fbbf24");
-        Button buttonC = new Btn("C",60,60,20);
-        Button buttonNegative = new Btn("+/-",60,60,20);
-        Button buttonModulo = new Btn("%",60,60,15);
+        Button buttonC = new Btn("C",60,60,20,"#64748b");
+        Button buttonNegative = new Btn("+/-",60,60,20,"#64748b");
+        Button buttonModulo = new Btn("%",60,60,15,"#64748b");
         Button buttonDivision = new Btn("÷",60,60,20,"#fbbf24");
 
         HBox hbx1 = new HBox();
@@ -75,6 +73,15 @@ public class Calculator extends Application {
 
         for (int i=0; i<10;i++) {
             int btnNum = i ;
+            String btnStyle = buttons[btnNum].getStyle();
+
+            buttons[btnNum].setOnMousePressed(event -> {
+                buttons[btnNum].setStyle(btnStyle+"-fx-background-color: #9ca3af;"); 
+            });
+
+            buttons[btnNum].setOnMouseReleased(event -> {
+                buttons[btnNum].setStyle(btnStyle); 
+            });
             buttons[i].setOnAction(e -> {
                 System.out.println(btnNum+" clicked!");
                 
