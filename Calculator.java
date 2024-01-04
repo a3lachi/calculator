@@ -1,3 +1,7 @@
+// export PATH_TO_FX=/Users/farawa/Downloads/javafx-sdk-21.0.1/lib 
+// javac --module-path $PATH_TO_FX --add-modules javafx.controls Calculator.java ; java --module-path $PATH_TO_FX --add-modules javafx.controls Calculator
+
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -70,7 +74,21 @@ public class Calculator extends Application {
         headLabel.getChildren().add(l);
 
         Button[] buttons = {button0,button1,button2,button3,button4,button5,button6,button7,button8,button9} ;
+        Button[] buttonsOp = {buttonDivision,buttonMultiply,buttonPlus, buttonMinus , buttonEqual};
+        
+        
+        for (Button button : buttonsOp) {
+            String btnStyle = button.getStyle();
 
+            button.setOnMousePressed(event -> {
+                button.setStyle(btnStyle+"-fx-background-color: #a16207;"); 
+            });
+
+            button.setOnMouseReleased(event -> {
+                button.setStyle(btnStyle); 
+            });
+        }
+        // display number when ints clicked
         for (int i=0; i<10;i++) {
             int btnNum = i ;
             String btnStyle = buttons[btnNum].getStyle();
