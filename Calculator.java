@@ -28,12 +28,19 @@ class Btn extends Button {
     }
 }
 
+class Calculation {
+    double firstDouble ;
+    double seconddouble ;
+    char operation ;
+}
+
 public class Calculator extends Application {
 
     @Override
     public void start(Stage stage) {
+
+        Calculation calc = new Calculation() ;
         
-        // Button button0 = new Button("0");button0.setStyle("-fx-font-size: 20;");
         Btn button0 = new Btn("0",120,60,20);
         Button buttonVirgule = new Btn(",",60,60,20);
         Button buttonEqual = new Btn("=",60,60,20,"#fbbf24");

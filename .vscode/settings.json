@@ -1,0 +1,5 @@
+{
+    "java.project.referencedLibraries": [
+        "/Users/farawa/Downloads/javafx-sdk-21.0.1/lib/*.jar" // Replace with the path to your JavaFX SDK's lib folder
+    ]
+}
