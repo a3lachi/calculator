@@ -1,5 +1,6 @@
 // export PATH_TO_FX=/Users/farawa/Downloads/javafx-sdk-21.0.1/lib 
 // javac --module-path $PATH_TO_FX --add-modules javafx.controls Calculator.java ; java --module-path $PATH_TO_FX --add-modules javafx.controls Calculator
+// javac --module-path /Users/farawa/Downloads/javafx-sdk-21.0.1/lib --add-modules javafx.controls Calculator.java ; java --module-path /Users/farawa/Downloads/javafx-sdk-21.0.1/lib --add-modules javafx.controls Calculator
 
 
 import javafx.application.Application;
@@ -30,16 +31,53 @@ class Btn extends Button {
 
 class Calculation {
     double firstDouble ;
-    double seconddouble ;
+    double secondDouble ;
     char operation ;
+    char savedOperation ;
+    double result ;
+
+    Calculation(double firstDouble , double secondDouble , char operation) {
+        this.firstDouble = firstDouble ;
+        this.secondDouble = secondDouble ;
+        this.operation = operation ;
+    }
+
+    public void setFirstDouble (double firstDouble) {
+        this.firstDouble = firstDouble ;
+    }
+
+    public void setSecondDouble (double secondDouble) {
+        this.secondDouble = secondDouble ;
+    }
+
+    public void setOperation (char operation) {
+        this.operation = operation ;
+    }
+
+    public void setResult(double result) {
+        this.result = result ;
+    }
+
+    public char getOperation() {
+        return this.savedOperation ;
+    }
 }
 
+
 public class Calculator extends Application {
+
+    void updatePanel(StackPane headLabel, String textCalc) {
+        Label labelToAdd = new Label(textCalc);
+        labelToAdd.setPrefHeight(50);
+        labelToAdd.setPrefWidth(240);
+        labelToAdd.setStyle(" -fx-background-color: #475569; -fx-font-size: 30 ; -fx-text-fill: #f8fafc; -fx-alignment: center-right; -fx-padding: 0 10 0 0;");
+        headLabel.getChildren().remove(0);headLabel.getChildren().add(labelToAdd);
+    }
 
     @Override
     public void start(Stage stage) {
 
-        Calculation calc = new Calculation() ;
+        Calculation calc = new Calculation(0, 0, ' ');
         
         Btn button0 = new Btn("0",120,60,20);
         Button buttonVirgule = new Btn(",",60,60,20);
@@ -82,19 +120,39 @@ public class Calculator extends Application {
 
         Button[] buttons = {button0,button1,button2,button3,button4,button5,button6,button7,button8,button9} ;
         Button[] buttonsOp = {buttonDivision,buttonMultiply,buttonPlus, buttonMinus , buttonEqual};
+        char[] buttonsCharOp = {'÷','x','+','-','='};
         
-        
-        for (Button button : buttonsOp) {
-            String btnStyle = button.getStyle();
+        for (int i=0;i<5;i++) {
+            String btnStyle = buttonsOp[i].getStyle();
+            int bntNum = i ;
 
-            button.setOnMousePressed(event -> {
-                button.setStyle(btnStyle+"-fx-background-color: #a16207;"); 
+            buttonsOp[i].setOnMousePressed(event -> {
+                buttonsOp[bntNum].setStyle(btnStyle+"-fx-background-color: #a16207;"); 
             });
 
-            button.setOnMouseReleased(event -> {
-                button.setStyle(btnStyle); 
+            buttonsOp[i].setOnMouseReleased(event -> {
+                buttonsOp[bntNum].setStyle(btnStyle); 
             });
+            
+            if (i<4) {
+                buttonsOp[i].setOnAction(e -> {
+                    Label insideCalc = (Label) headLabel.getChildren().get(0);
+                    double firstElem = Double.parseDouble(insideCalc.getText()) ;
+                    calc.setFirstDouble(firstElem);
+                    calc.setOperation(buttonsCharOp[bntNum]);
+                });
+            }
         }
+
+        buttonEqual.setOnAction(e->{
+            Label insideCalc = (Label) headLabel.getChildren().get(0);
+            double secondElem = Double.parseDouble(insideCalc.getText()) ;
+            System.out.println("First elem : "+calc.firstDouble+" , Second elem : "+secondElem);
+            double result = calc.firstDouble*secondElem ;
+            calc.setResult(result);
+            updatePanel(headLabel, String.valueOf(result));
+        });
+
         // display number when ints clicked
         for (int i=0; i<10;i++) {
             int btnNum = i ;
@@ -115,13 +173,23 @@ public class Calculator extends Application {
                 if (textCalc.equals("0")) {
                     textCalc = String.valueOf(btnNum);
                 } else {
-                    textCalc += String.valueOf(btnNum);
+                    if (calc.operation == ' ') {
+                        textCalc += String.valueOf(btnNum);
+                    }
+                    // } else {
+                    //     calc.savedOperation = calc.operation ;
+                    //     calc.operation = ' ';
+                    //     calc.firstDouble = Double.parseDouble(textCalc);
+                    //     textCalc = String.valueOf(btnNum) ;
+                    // }
                 }
-                Label labelToAdd = new Label(textCalc);
-                labelToAdd.setPrefHeight(50);
-                labelToAdd.setPrefWidth(240);
-                labelToAdd.setStyle(" -fx-background-color: #475569; -fx-font-size: 30 ; -fx-text-fill: #f8fafc; -fx-alignment: center-right; -fx-padding: 0 10 0 0;");
-                headLabel.getChildren().remove(0);headLabel.getChildren().add(labelToAdd);
+                updatePanel(headLabel, textCalc);
+
+                if (calc.operation == ' ') {
+                    calc.setFirstDouble(Double.parseDouble(textCalc));
+                } else {
+                    calc.setSecondDouble(Double.parseDouble(textCalc));
+                }
             });
         }
 
@@ -130,8 +198,8 @@ public class Calculator extends Application {
             System.out.println(", clicked!");
             Label insideCalc = (Label) headLabel.getChildren().get(0);
             String textCalc = insideCalc.getText() ;
-            if (textCalc.indexOf(",")==-1) {
-                textCalc += ",";
+            if (textCalc.indexOf(".")==-1) {
+                textCalc += ".";
             }
             Label labelToAdd = new Label(textCalc);
             labelToAdd.setPrefHeight(50);
@@ -142,6 +210,7 @@ public class Calculator extends Application {
 
         buttonC.setOnAction(e -> {
             System.out.println("C clicked!");
+            calc.setOperation(' ');
             String textCalc = "0";
             Label labelToAdd = new Label(textCalc);
             labelToAdd.setPrefHeight(50);
@@ -158,6 +227,7 @@ public class Calculator extends Application {
         Scene scene = new Scene(root, 240, 350);
         stage.setScene(scene);
         stage.show();
+
     }
 
     public static void main(String[] args) {
